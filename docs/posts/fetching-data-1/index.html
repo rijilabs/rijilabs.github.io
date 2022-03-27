@@ -4,7 +4,9 @@
   <meta name="generator" content="quarto-0.9.16">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <meta name="author" content="RiJiLabs">
-  <title>RiJiLabs - Fetching &amp; Preparing Data: stock market data for S&amp;P 500</title>
+  <meta name="dcterms.date" content="2022-03-25">
+  <meta name="description" content="Stock market data for S&amp;P 500">
+  <title>RiJiLabs - Fetching &amp; Preparing Data</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -163,9 +165,10 @@
 <!-- main -->
 <main class="content" id="quarto-document-content">
 <header id="title-block-header">
-<h1 class="title display-7">Fetching &amp; Preparing Data: stock market data for S&amp;P 500</h1>
+<h1 class="title display-7">Fetching &amp; Preparing Data</h1>
+<p class="subtitle lead">Stock market data for S&amp;P 500</p>
 <p class="author">RiJiLabs</p>
-<p class="date">21/03/2022</p>
+<p class="date">03/25/2022</p>
 </header>
 <hr>
 <p>This is a brief post where we fetch and prepare some stock market data that we will be using later on subsequent posts. Fetching and preparing data are without doubt two key steps in any data-driven process, but they are not going to be a major topic in this blog. Nevertheless, we are going to separate this into an independent post where we will cover along the way few important points regarding this type of data.</p>
@@ -189,7 +192,7 @@ Caution
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>It is very important to note that this universe of companies changes over time – constituents of the index can be removed and substituted by anothers. If we want to do avoid any <a href="https://en.wikipedia.org/wiki/Survivorship_bias">survivorship bias</a> when looking into the behavior of the universe over time, we should properly cover those changes <strong>point-in-time</strong>.</p>
+<p>It is very important to note that this universe of companies changes over time – constituents of the index can be removed and substituted by others. If we want to do avoid any <a href="https://en.wikipedia.org/wiki/Survivorship_bias">survivorship bias</a> when looking into the behavior of the universe over time, we should properly cover those changes <strong>point-in-time</strong>.</p>
 </div>
 </div>
 <p>Since our post has only illustration purposes we are not going to cover this perfectly but we will do what we can by looking into the information available in the S&amp;P 500 Wikipedia <a href="https://en.wikipedia.org/wiki/List_of_S%26P_500_companies">page</a>.</p>
@@ -246,13 +249,26 @@ Caution
 </div>
 </div>
 <p>Note that we have two tables, one with the starting date when the companies where included into the index and the other with the ending date when some of the companies where removed. In order to have a <strong>point-in-time</strong> coverage of the index we extract both dates and join them into a table/dataframe. Like this we expect to have, for each company, the starting date and end date (if any) when they entered and left the index over time.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We are going to use the tickers (symbols) as the company identifier, since this is all we have, other than the name, from the Wiki page. This is not a very good practice since tickers can change over time and can be reused for different companies, but we will ignore any potential issues here.</p>
+</div>
+</div>
 <div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Python</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labeledby="tabset-2-1-tab">
 <div class="cell">
 <div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>table1 <span class="ot">=</span> table1[, .(Symbol, <span class="st">`</span><span class="at">Date first added</span><span class="st">`</span>)]</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(table1) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"TICKER"</span>,<span class="st">"START_DATE"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(table1) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"TICKER"</span>, <span class="st">"START_DATE"</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>table1[ , START_DATE <span class="sc">:</span><span class="er">=</span> <span class="fu">as.Date</span>(START_DATE)]</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>table1 <span class="ot">=</span> table1[<span class="sc">!</span><span class="fu">is.na</span>(TICKER)]</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
@@ -283,9 +299,9 @@ Caution
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>table2 <span class="op">=</span> table2[table2[<span class="st">"TICKER"</span>].notna()]</span>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>sp500DT <span class="op">=</span> pd.merge(table1, table2, on <span class="op">=</span> <span class="st">"TICKER"</span>, how <span class="op">=</span> <span class="st">'outer'</span>)</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>sp500DT <span class="op">=</span> sp500DT.sort_values(by <span class="op">=</span> <span class="st">'TICKER'</span>)</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>sp500DT.iloc[:<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>sp500DF <span class="op">=</span> pd.merge(table1, table2, on <span class="op">=</span> <span class="st">"TICKER"</span>, how <span class="op">=</span> <span class="st">'outer'</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>sp500DF <span class="op">=</span> sp500DF.sort_values(by <span class="op">=</span> <span class="st">'TICKER'</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>sp500DF.iloc[:<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre><code>    TICKER START_DATE   END_DATE
 13       A 2000-06-05        NaT
@@ -296,7 +312,7 @@ Caution
 </div>
 </div>
 <p>Just by looking at the both initial rows it becomes obvious that we have instances where END_DATE is not available – we can assume this means that those companies are still constituents of the index as of today; we will populate these with a future time to avoid any issues when using the table (e.g.&nbsp;“2111-11-11”). We also have many instances where START_DATE is missing – similarly, we can assume here that these companies have been in the index since the beginning; we can populate this with any date prior to the dates we are interested in (we will just pick the oldest date available in the table).</p>
-<p>Unfortunately, there are few companies with different END_DATEs for which we are missing some information: these are companies that have been incorporated and removed from the index several times, for which we don’t have any of the corresponding START_DATEs. Because there are very few cases and we don’t intend to have very accurate results anyway, we will simply take the last END_DATE and assume these companies were inside the index all the time up until then. To do that we simply get the row with maximum END_DATE per TICKER.</p>
+<p>Unfortunately, there are few tickers with multiple END_DATEs: these could represent companies that have been incorporated and removed from the index several times, or, as we discussed earlier, mean that a ticker is being reused for a different company. Either case, we are missing some information: we don’t have any of the corresponding START_DATEs. Because there are very few cases and we don’t intend to have very accurate results anyway, we will simply take the last END_DATE and assume this ticker represents a company that was inside the index up until that date. In order to do that we simply get the row with maximum END_DATE per TICKER.</p>
 <div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Python</a></li></ul>
 <div class="tab-content">
@@ -315,10 +331,10 @@ Caution
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labeledby="tabset-3-2-tab">
 <div class="cell">
-<div class="sourceCode" id="cb15"><pre class="sourceCode python cell-code code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sp500DT[<span class="st">"END_DATE"</span>] <span class="op">=</span> sp500DT.END_DATE.fillna(pd.to_datetime(<span class="st">"2111-11-11"</span>))</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>sp500DT[<span class="st">"START_DATE"</span>] <span class="op">=</span> sp500DT.START_DATE.fillna(sp500DT.START_DATE.<span class="bu">min</span>())</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>sp500DT <span class="op">=</span> sp500DT.sort_values(<span class="st">'END_DATE'</span>).groupby(<span class="st">'TICKER'</span>).tail(<span class="dv">1</span>).sort_values(by <span class="op">=</span> <span class="st">'TICKER'</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>sp500DT.iloc[:<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python cell-code code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sp500DF[<span class="st">"END_DATE"</span>] <span class="op">=</span> sp500DF.END_DATE.fillna(pd.to_datetime(<span class="st">"2111-11-11"</span>))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>sp500DF[<span class="st">"START_DATE"</span>] <span class="op">=</span> sp500DF.START_DATE.fillna(sp500DF.START_DATE.<span class="bu">min</span>())</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>sp500DF <span class="op">=</span> sp500DF.sort_values(<span class="st">'END_DATE'</span>).groupby(<span class="st">'TICKER'</span>).tail(<span class="dv">1</span>).sort_values(by <span class="op">=</span> <span class="st">'TICKER'</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>sp500DF.iloc[:<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre><code>    TICKER START_DATE   END_DATE
 13       A 2000-06-05 2111-11-11
@@ -331,7 +347,201 @@ Caution
 </section>
 <section id="get-stock-market-data" class="level2">
 <h2 class="anchored" data-anchor-id="get-stock-market-data">2. Get stock market data</h2>
-<p>Now that we have a <strong>point-in-time</strong> version of the S&amp;P 500 index, with all its constituents over time, we can move to retrieving the market data.</p>
+<p>Now that we have a <strong>point-in-time</strong> version of the S&amp;P 500 index, with all its constituents over time, we can move to retrieving the market data. We will use <a href="https://finance.yahoo.com/">Yahoo! Finance</a> and its internal API to request historical stock market data.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The format of the queries to request data may change in the future. In order to figure this out, you can navigate into the website to manually request some data and check the URL that appears in the Download button by Inspecting the website/entering the Web Developer Tools. For example, for <a href="https://finance.yahoo.com/quote/AAPL/history?period1=1640476800&amp;period2=1648252800&amp;interval=1d&amp;filter=history&amp;frequency=1d&amp;includeAdjustedClose=true">this</a>, the corresponding <strong>Request URL</strong> at the moment of writting this post is <em>https://query1.finance.yahoo.com/v7/finance/download/AAPL?period1=1640476800&amp;period2=1648252800&amp;int</em></p>
+</div>
+</div>
+<p>In particular, we will get the default daily pricing and trading volume data from “2000-01-01” to “2022-03-01” for all the companies in the index (if available). We have to request data company by company so we loop over all available tickers:</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labeledby="tabset-4-1-tab">
+<div class="cell">
+<div class="sourceCode" id="cb17"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>startDate <span class="ot">=</span> <span class="fu">as.POSIXct</span>(<span class="st">"2000-01-01"</span>,<span class="at">tz =</span> <span class="st">"GMT"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>endDate <span class="ot">=</span> <span class="fu">as.POSIXct</span>(<span class="st">"2022-03-01"</span>,<span class="at">tz =</span> <span class="st">"GMT"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>marketDT <span class="ot">=</span> <span class="cn">NULL</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(ticker <span class="cf">in</span> sp500DT<span class="sc">$</span>TICKER){ </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  url2 <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"https://query1.finance.yahoo.com/v7/finance/download/"</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>               ticker,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>               <span class="st">"?period1="</span>, <span class="fu">as.integer</span>(startDate),</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>               <span class="st">"&amp;period2="</span>, <span class="fu">as.integer</span>(endDate),</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>               <span class="st">"&amp;interval=1d&amp;events=history"</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>               )</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  marketDT0 <span class="ot">=</span> <span class="fu">tryCatch</span>(</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    {<span class="fu">read.csv</span>(url2)},</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">error =</span> <span class="cf">function</span>(e){<span class="fu">return</span>(<span class="cn">NULL</span>)},</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">warning =</span> <span class="cf">function</span>(w){}</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.null</span>(marketDT0)){</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setDT</span>(marketDT0)</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    marketDT0[ , TICKER <span class="sc">:</span><span class="er">=</span> ticker]</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    marketDT <span class="ot">=</span> <span class="fu">rbind</span>(marketDT, marketDT0)</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rm</span>(marketDT0)</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">5</span>) <span class="co"># to avoid issues with request limits we slow down the process</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(marketDT) <span class="ot">=</span> <span class="fu">toupper</span>(<span class="fu">names</span>(marketDT))</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="fu">setkey</span>(marketDT, DATE, TICKER)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb18"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>marketDT[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>         DATE      OPEN       HIGH       LOW     CLOSE ADJ.CLOSE  VOLUME TICKER
+1: 2000-01-03 56.330471  56.464592 48.193848 51.502148 43.812588 4674353      A
+2: 2000-01-03 99.724503 100.400345 96.570564 97.246407 71.984177 1291386     AA</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labeledby="tabset-4-2-tab">
+<div class="cell">
+<div class="sourceCode" id="cb20"><pre class="sourceCode python cell-code code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>startDate <span class="op">=</span> pd.to_datetime(<span class="st">"01-01-2000"</span>))</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>endDate <span class="op">=</span> pd.to_datetime(<span class="st">"03-01-2022"</span>))</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>marketDF <span class="op">=</span> pd.DataFrame()</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ticker <span class="kw">in</span> sp500DF.TICKER:</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  url2 <span class="op">=</span> (<span class="st">"https://query1.finance.yahoo.com/v7/finance/download/"</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> ticker</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> <span class="st">"?period1="</span> <span class="op">+</span>   <span class="bu">str</span>(<span class="bu">int</span>(startDate.value <span class="op">/</span> <span class="dv">1000000000</span>)) </span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> <span class="st">"&amp;period2="</span> <span class="op">+</span> <span class="bu">str</span>(<span class="bu">int</span>(endDate.value <span class="op">/</span> <span class="dv">1000000000</span>)) </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> <span class="st">"&amp;interval=1d&amp;events=history"</span>)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span>: </span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    marketDF0 <span class="op">=</span> pd.read_csv(url2)</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">except</span>:</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>: </span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    marketDF0[<span class="st">'TICKER'</span>] <span class="op">=</span> ticker </span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>    marketDF <span class="op">=</span> marketDF.append(marketDF0)</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>  time.sleep(<span class="dv">5</span>) <span class="co"># to avoid issues with request limits we slow down the process</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>marketDF.columns<span class="op">=</span>marketDF.columns.<span class="bu">str</span>.upper()</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>marketDF <span class="op">=</span> marketDF.sort_values(by <span class="op">=</span> [<span class="st">'DATE'</span>, <span class="st">'TICKER'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb21"><pre class="sourceCode python cell-code code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>marketDF.iloc[:<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>              DATE       OPEN        HIGH  ...  ADJ CLOSE     VOLUME  TICKER
+972402  2000-01-03  56.330471   56.464592  ...  43.812580  4674353.0       A
+358542  2000-01-03  99.724503  100.400345  ...  71.984161  1291386.0      AA
+
+[2 rows x 8 columns]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="clean-and-prepare-the-data-for-later-use" class="level2">
+<h2 class="anchored" data-anchor-id="clean-and-prepare-the-data-for-later-use">3. Clean and prepare the data for later use</h2>
+<p>We are missing 102 from 775 companies. All of them are companies that have been removed from the index, so missing them could introduce survivorship bias. At least few of them are companies that have been acquired by another and Yahoo does not seem to track them in a point-in-time fashion, so the old tickers and corresponding market information have been lost. We will not spend time looking into this, we just want a reasonable sample of market data for illustration purposes.</p>
+<p>As final steps, we:</p>
+<ul>
+<li>transform the data to the correct format.</li>
+<li>remove rows with missing information (<em>e.g.</em> dates that were returned with NULLs).</li>
+<li>measure daily close to close returns. It is important to use Adjusted Close Prices (ADJ.CLOSE) for this, as they incorporate <a href="https://www.investopedia.com/ask/answers/06/adjustedclosingprice.asp">adjustments for splits and dividends</a>.</li>
+<li>remove some of the bad data. There are plenty of issues (<em>e.g.</em> wrong prices) in the Wikipedia market data, we would not recommend to use it for serious research. We are not trying to solve any of those issues here so we will simply remove any daily returns larger than 1 (100% increase) or smaller than -0.8 (80% drop).</li>
+<li>make the market data time sensitive over the index constituents (currently we have information for the full period of time, if available, for all companies, regardless of when they entered or left the index).</li>
+<li>save the information in a csv file.</li>
+</ul>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labeledby="tabset-5-1-tab">
+<div class="cell">
+<div class="sourceCode" id="cb23"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>marketDT[ , DATE <span class="sc">:</span><span class="er">=</span> <span class="fu">as.Date</span>(DATE)]</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>namesCol <span class="ot">=</span> <span class="fu">names</span>(marketDT)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>namesCol <span class="ot">=</span> namesCol[<span class="sc">!</span>namesCol <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"DATE"</span>, <span class="st">"TICKER"</span>)]</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>marketDT[ , (namesCol) <span class="sc">:</span><span class="er">=</span> <span class="fu">lapply</span>(.SD, as.numeric), .SDcols <span class="ot">=</span> namesCol]</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>marketDT <span class="ot">=</span> marketDT[<span class="fu">complete.cases</span>(marketDT)]</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># measure daily returns</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>marketDT[, ADJ.CLOSE_o <span class="sc">:</span><span class="er">=</span> <span class="fu">shift</span>(ADJ.CLOSE, <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"lag"</span>), by <span class="ot">=</span> TICKER]</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>marketDT[, RET<span class="sc">:</span><span class="er">=</span>(ADJ.CLOSE <span class="sc">-</span> ADJ.CLOSE_o) <span class="sc">/</span> ADJ.CLOSE_o, by <span class="ot">=</span> TICKER]</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>marketDT[, ADJ.CLOSE_o <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co"># "remove" some bad data by converting to NA de daily returns</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>marketDT[RET <span class="sc">&gt;</span> <span class="dv">1</span>, RET <span class="sc">:</span><span class="er">=</span> <span class="cn">NA</span>]</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>marketDT[RET <span class="sc">&lt;</span> (<span class="sc">-</span><span class="fl">0.8</span>), RET <span class="sc">:</span><span class="er">=</span> <span class="cn">NA</span>]</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="co"># add start and end dates and filter for a point-in-time index</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>marketDT <span class="ot">=</span> <span class="fu">merge</span>(marketDT, sp500DT, <span class="at">by =</span> <span class="st">"TICKER"</span>)</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>marketDT <span class="ot">=</span> marketDT[DATE <span class="sc">&gt;=</span> START_DATE <span class="sc">&amp;</span> DATE <span class="sc">&lt;=</span> END_DATE]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb24"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># save data</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>dirPath <span class="ot">=</span> <span class="st">"YOUR_DIRECTORY_PATH"</span> <span class="co"># Put here your path</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fwrite</span>(marketDT, <span class="fu">paste0</span>(dirPath, <span class="st">"marketDT.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labeledby="tabset-5-2-tab">
+<div class="cell">
+<div class="sourceCode" id="cb25"><pre class="sourceCode python cell-code code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>marketDF[<span class="st">'DATE'</span>] <span class="op">=</span> pd.to_datetime(marketDF[<span class="st">'DATE'</span>])</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>marketDF <span class="op">=</span> marketDF.dropna()</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># measure daily returns</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>marketDF[<span class="st">'ADJ CLOSE o'</span>] <span class="op">=</span> marketDF.groupby(<span class="st">'TICKER'</span>)[<span class="st">'ADJ CLOSE'</span>].shift(<span class="dv">1</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>marketDF[<span class="st">'RET'</span>] <span class="op">=</span> (marketDF[<span class="st">'ADJ CLOSE'</span>] <span class="op">-</span> marketDF[<span class="st">'ADJ CLOSE o'</span>])<span class="op">/</span>marketDF[<span class="st">'ADJ CLOSE o'</span>]</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>marketDF.drop(columns <span class="op">=</span> <span class="st">'ADJ CLOSE o'</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co"># "remove" some bad data by converting to NA de daily returns</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>marketDF.loc[marketDF.RET <span class="op">&gt;</span> <span class="dv">1</span>, <span class="st">'RET'</span>] <span class="op">=</span> pd.NA</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>marketDF.loc[marketDF.RET <span class="op">&lt;</span> (<span class="op">-</span><span class="fl">0.8</span>), <span class="st">'RET'</span>] <span class="op">=</span> pd.NA</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co"># add start and end dates and filter for a point-in-time index</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>marketDF <span class="op">=</span> pd.merge(marketDF, sp500DF, how <span class="op">=</span> <span class="st">"left"</span>, on <span class="op">=</span> [<span class="st">'TICKER'</span>])</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>marketDF <span class="op">=</span> marketDF[(marketDF.DATE <span class="op">&gt;=</span> marketDF.START_DATE) <span class="op">&amp;</span> (marketDF.DATE <span class="op">&lt;=</span> marketDF.END_DATE)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb26"><pre class="sourceCode python cell-code code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># save data</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>dirPath <span class="op">=</span> <span class="st">"YOUR_DIRECTORY_PATH"</span> <span class="co"># Put here your path</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>marketDF.to_csv(dirPath <span class="op">+</span> <span class="st">"marketDF.csv"</span> , index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>As a last checkup, we look into the number of companies in the index for which we have pricing information in the table:</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labeledby="tabset-6-1-tab">
+<div class="cell">
+<div class="sourceCode" id="cb27"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>NDT <span class="ot">=</span> marketDT[<span class="sc">!</span><span class="fu">is.na</span>(RET)][, .N, by <span class="ot">=</span> DATE]</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(NDT) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> DATE, <span class="at">y=</span> N )) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labeledby="tabset-6-2-tab">
+<div class="cell">
+<div class="sourceCode" id="cb28"><pre class="sourceCode python cell-code code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>NDF <span class="op">=</span> marketDF[<span class="op">~</span>marketDF.RET.isna()].groupby(<span class="st">'DATE'</span>).size().reset_index(name <span class="op">=</span> <span class="st">'N'</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>sns.lineplot(x <span class="op">=</span> <span class="st">'DATE'</span>, y <span class="op">=</span> <span class="st">'N'</span>, data <span class="op">=</span> NDF)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Unfortunately, the numbers are not looking very good; there is a clear deterioration of the index when moving backwards in time. This clearly hints towards <strong>survivorship bias</strong>, which could affect all our results and jeopardize any of the conclusions. As already mentioned above, we are only going to use this data as a sample, but we still wanted to point out the potential issues when using low quality data.</p>
 
 
 </section>
