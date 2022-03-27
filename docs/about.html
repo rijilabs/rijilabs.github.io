@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="quarto-0.9.16">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>RiJiLabs</title>
+  <title>RiJiLabs - About</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -21,8 +21,6 @@
   <script src="site_libs/quarto-search/fuse.min.js"></script>
   <script src="site_libs/quarto-search/quarto-search.js"></script>
   <link href="./logorj.png" rel="icon" type="image/png">
-  <script src="site_libs/quarto-listing/list.min.js"></script>
-  <script src="site_libs/quarto-listing/quarto-listing.js"></script>
   <script src="site_libs/quarto-html/quarto.js"></script>
   <script src="site_libs/quarto-html/popper.min.js"></script>
   <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -53,35 +51,12 @@
       "search-submit-button-title": "Submit"
     }
   }</script>
-  <script>
-
-    window.document.addEventListener("DOMContentLoaded", function (_event) {
-      const listingTargetEl = window.document.querySelector('#listing .list');
-      if (!listingTargetEl) {
-        // No listing discovered, do not attach.
-        return; 
-      }
-
-      const options = {
-        valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-        
-        searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-      };
-
-      window['quarto-listings'] = window['quarto-listings'] || {};
-      window['quarto-listings']['listing'] = new List('listing', options);
-
-      if (window['quarto-listing-loaded']) {
-        window['quarto-listing-loaded']();
-      }
-    });
-    </script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="fullcontent">
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -95,7 +70,10 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html">About</a>
+    <a class="nav-link" href="./index.html">Home</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./about.html" aria-current="page">About</a>
   </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="https://www.github.com/"><i class="bi-github" role="img">
@@ -120,100 +98,34 @@
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(3)</span></div><div class="category" data-category="S&amp;P 500">S&amp;P 500 <span class="quarto-category-count">(2)</span></div><div class="category" data-category="event studies">event studies <span class="quarto-category-count">(1)</span></div><div class="category" data-category="market impact">market impact <span class="quarto-category-count">(1)</span></div><div class="category" data-category="point-in-time">point-in-time <span class="quarto-category-count">(2)</span></div><div class="category" data-category="scraping">scraping <span class="quarto-category-count">(2)</span></div><div class="category" data-category="survivorship-bias">survivorship-bias <span class="quarto-category-count">(2)</span></div></div></div>
+    
 <!-- main -->
-<main class="content" id="quarto-document-content">
-<header id="title-block-header">
-<h1 class="title display-7">RiJiLabs</h1>
-</header>
-<p>Random Data Science and Art</p>
+<div class="jolla">
+  <img src="profile.jpg" class="about-image
+  round " style="height: 15em; width: 15em;">
+ <header id="title-block-header">
+<h1 class="title display-7">About</h1>
+</header><main class="content" id="quarto-document-content">
+<p>Random Data Science and Art</p><p>About this blog</p>
 
-
-
-<div id="listing" class="quarto-listing">
-<div class="listing-actions-group">
-   <div class="input-group input-group-sm quarto-listing-sort">
-     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
-     <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
-       <option value="" disabled="" selected="" hidden="">Order By</option>
-       <option value="index" data-direction="asc">Default</option>
-         <option value="listing-title" data-direction="asc">
-          Title
-        </option>
-         <option value="listing-date-sort" data-direction="asc">
-          Date - Newest
-        </option>
-         <option value="listing-date-sort" data-direction="desc">
-          Date - Oldest
-        </option>
-         <option value="listing-author" data-direction="asc">
-          Author
-        </option>
-     </select>
-  </div>
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
-</div>
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="scraping,S&amp;P 500,point-in-time,survivorship-bias" data-listing-date-sort="NaN" data-listing-file-modified-sort="1648238140558" data-listing-reading-time-sort="4.04">
-<div class="thumbnail">
-<p><a href="./posts/fetching-data-2/index.html"> <img src="posts/fetching-data-2/stock-g1ce0a59aa_1280.jpg" class="thumnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/fetching-data-2/index.html">
-<h3 class="no-anchor listing-title">
-Fetching &amp; Preparing Data: stock market data for S&amp;P 500 2
-</h3>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('scraping'); return false;">
-scraping
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('S&amp;P 500'); return false;">
-S&amp;P 500
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('point-in-time'); return false;">
-point-in-time
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('survivorship-bias'); return false;">
-survivorship-bias
+</main>
+  <hr class="about-sep">
+  <div class="about-links">
+  <a href="https://www.twitter.com" class="about-link">
+    <i class="bi bi-twitter"></i>
+     Twitter
+  </a>
+  <a href="https://www.linkedin.com" class="about-link">
+    <i class="bi bi-linkedin"></i>
+     LinkedIn
+  </a>
+  <a href="https://www.github.com" class="about-link">
+    <i class="bi bi-github"></i>
+     Github
+  </a>
 </div>
 </div>
-<a href="./posts/fetching-data-2/index.html">
-<div class="listing-description">
-<table class="table">
-<colgroup>
-<col style="width: 100%">
-</colgroup>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"></td>
-</tr>
-</tbody>
-</table>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/fetching-data-1/index.html">
-<div class="listing-date">
-Invalid Date
-</div>
-<div class="listing-author">
-RiJiLabs
-</div>
-</a><p><a href="./posts/fetching-data-1/index.html"></a></p>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+ <!-- /main -->
 <script type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const disableStylesheet = (stylesheets) => {
@@ -388,11 +300,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
-      <div class="nav-footer-center">©2022, RiJiLabs</div>
-  </div>
-</footer>
 
 
 </body></html>
